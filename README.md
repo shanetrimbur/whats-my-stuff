@@ -1,6 +1,6 @@
-# Declutter App
+# What's My Stuff
 
-A web-based application that helps users declutter their homes by taking pictures, tagging items using AI/ML, and organizing them into a database.
+A web-based application that helps users make best use of their stuff by taking pictures, tagging items using AI/ML, and organizing them into a database.
 
 ## Features
 
