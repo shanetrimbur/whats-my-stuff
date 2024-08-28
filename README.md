@@ -17,6 +17,6 @@ A web-based application that helps users declutter their homes by taking picture
 
 ## Usage
 
-- Capture items using your webcam.
+- Capture items using a camera. Most likely a mobile device.
 - View and manage your tagged items.
 - List items in the marketplace and make trades.
