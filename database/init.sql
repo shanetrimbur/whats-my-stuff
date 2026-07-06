@@ -7,5 +7,11 @@ CREATE TABLE IF NOT EXISTS users (
 
 CREATE TABLE IF NOT EXISTS items (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    tags TEXT NOT NULL
+    user_id INTEGER,
+    image_path TEXT,
+    tags TEXT NOT NULL DEFAULT '[]',
+    title TEXT,
+    description TEXT,
+    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id)
 );
