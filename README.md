@@ -12,11 +12,17 @@ A web-based application that helps users make best use of their stuff (random ju
 
 ## Setup
 
-1. Run `setup.sh` to initialize the SQLite database.
-2. Start your PHP server and navigate to `index.html`.
+1. Run `bash scripts/setup.sh` from the project root to initialize the SQLite database and upload directory.
+2. Start a PHP server from the project root, for example `php -S localhost:8000`.
+3. Navigate to `http://localhost:8000/frontend/index.html`.
 
 ## Usage
 
 - Capture items using a camera. Most likely a mobile device.
-- View and manage your tagged items.
+- View captured items and generated starter tags.
 - List items in the marketplace and make trades.
+
+## Current development focus
+
+The core capture flow now stores uploaded images on disk and item metadata in SQLite. AI tagging,
+authentication, marketplace trades, transactions, and notifications are still planned areas.
