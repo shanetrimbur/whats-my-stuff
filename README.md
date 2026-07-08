@@ -16,7 +16,7 @@ No app install, no account. Photos are analyzed by a single Claude API call and 
 - `public/` — one mobile-first page. `<input type="file" capture="environment">` opens the camera on phones; photos are resized to ≤1280px JPEG on-device (which also strips EXIF/GPS metadata) before upload.
 - `server.js` — a small Node server that serves the static page and exposes one endpoint, `POST /api/analyze`. Model API keys never reach the browser.
 - `lib/analyze.js` — pluggable analyzer backends (see below).
-- `lib/pricing.js` — optional market-data providers that ground the value estimate in real reseller data.
+- `lib/demand/` — optional demand-signal provider registry plus WANTS scorer/router.
 - `bots/telegram.js` — optional chat interface: text the bot a photo, get the decision card back.
 
 ## Running it
@@ -54,19 +54,22 @@ ANALYZER=openai-compatible OPENAI_BASE_URL=http://localhost:11434/v1 \
   OPENAI_MODEL=llama3.2-vision npm start
 ```
 
-Nothing leaves your machine in that configuration (unless you also enable a pricing provider).
+Nothing leaves your machine in that configuration (unless you also enable a demand provider).
 
-## Market data for resellers
+## Demand data and WANTS routing
 
-Set `PRICING` to ground the AI's value estimate in the data resellers actually use. Stats are attached to the decision card as `result.market` and shown in the UI and Telegram replies. Lookups fail soft — if the provider is down or the item doesn't match, the card ships without stats.
+Set any demand provider keys in `.env` to ground the AI's value estimate in market signals. Signals are attached as `result.wants[]` with a per-marketplace WANTS score, confidence grade, net-proceeds estimate, days-to-sale bucket, and clickable sources. Lookups fail soft — if providers are down or no item matches, the card ships with the model-only v0 answer.
 
-| `PRICING` | Source | Config |
+| Provider | Source | Config |
 |---|---|---|
-| `none` (default) | — | — |
-| `ebay` | eBay Browse API — live comparable listings, asking-price low/median/high (free developer keys at developer.ebay.com) | `EBAY_CLIENT_ID`, `EBAY_CLIENT_SECRET` |
-| `keepa` | Keepa — the Amazon price-history service resellers use | `KEEPA_API_KEY` |
+| `ebay-browse` | eBay Browse API — live comparable listings and active supply (free developer keys at developer.ebay.com) | `EBAY_CLIENT_ID`, `EBAY_CLIENT_SECRET` |
+| `keepa` | Keepa — Amazon velocity, supply, and price data | `KEEPA_API_KEY` |
+| `discogs` | Discogs — music media wants/haves and price data | `DISCOGS_TOKEN` |
+| `pricecharting` | PriceCharting — games, cards, comics, and collectibles | `PRICECHARTING_API_KEY` |
+| `reverb` | Reverb — music gear listing supply and prices | `REVERB_TOKEN` |
+| `trends` | Registry placeholder for a legal Trends backend | `TRENDS_ENABLED=1` |
 
-Note: eBay's *sold*-comps API (Marketplace Insights) is gated behind a partner program, so the eBay provider reports live asking prices and links you to the sold-listings search. Keepa reports current Amazon used/new prices.
+Note: eBay's *sold*-comps API (Marketplace Insights) is gated behind a partner program, so the eBay provider reports live asking prices/active supply and links you to the sold-listings search.
 
 ## Telegram interface
 
@@ -77,7 +80,7 @@ Walk around the house, snap photos into a chat, triage later:
 TELEGRAM_BOT_TOKEN=123456:ABC... npm run telegram
 ```
 
-The bot uses long polling, so it runs from a laptop or Raspberry Pi behind NAT with no public URL, and shares the same `ANALYZER`/`PRICING` configuration as the web server. A Slack interface would need a public endpoint or Socket Mode, so Telegram ships first; the analysis logic in `lib/` is interface-agnostic if you want to add one.
+The bot uses long polling, so it runs from a laptop or Raspberry Pi behind NAT with no public URL, and shares the same `ANALYZER` and demand-provider configuration as the web server. A Slack interface would need a public endpoint or Socket Mode, so Telegram ships first; the analysis logic in `lib/` is interface-agnostic if you want to add one.
 
 ## Deploying
 

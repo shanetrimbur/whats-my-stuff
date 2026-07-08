@@ -102,6 +102,62 @@ h1 { margin: 0; font-size: 1.6rem; }
 .market a { color: inherit; }
 .reasoning { margin: 0.5rem 0 0; }
 
+.wants-panel {
+  margin: 0.7rem 0;
+  padding: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--bg);
+}
+.wants-meter {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+.wants-score {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  min-width: 4.3rem;
+  padding: 0.35rem 0.45rem;
+  border-radius: 10px;
+  background: var(--accent);
+  color: var(--accent-contrast);
+  font-weight: 800;
+}
+.wants-number { font-size: 1.45rem; }
+.wants-denom { font-size: 0.78rem; margin-left: 0.1rem; }
+.wants-copy strong { display: block; font-size: 0.98rem; }
+.wants-copy span { display: block; color: var(--muted); font-size: 0.85rem; }
+
+.routing-table {
+  display: grid;
+  gap: 0.4rem;
+  margin-top: 0.7rem;
+}
+.routing-row {
+  display: grid;
+  grid-template-columns: 1fr auto auto auto;
+  gap: 0.45rem;
+  align-items: center;
+  padding: 0.45rem 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--card);
+  font-size: 0.86rem;
+}
+.routing-row.top-route { border-color: var(--accent); }
+.route-market { font-weight: 700; }
+.route-net, .route-days { color: var(--muted); white-space: nowrap; }
+.routing-row a, .evidence a { color: inherit; }
+.route-source { color: var(--muted); }
+.evidence { color: var(--muted); font-size: 0.82rem; margin: 0.6rem 0 0; }
+
+@media (max-width: 430px) {
+  .routing-row { grid-template-columns: 1fr 1fr; }
+  .route-days, .routing-row a, .route-source { text-align: right; }
+}
+
 .next-step {
   margin-top: 0.9rem;
   padding-top: 0.9rem;
