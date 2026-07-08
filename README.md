@@ -12,6 +12,8 @@ A web-based application that helps users make best use of their stuff (random ju
 
 ## Setup
 
+For a fully reproducible macOS local development setup, see [LOCAL_DEVELOPMENT.md](LOCAL_DEVELOPMENT.md).
+
 1. Run `bash scripts/setup.sh` from the project root to initialize the SQLite database and upload directory.
 2. Start a PHP server from the project root, for example `php -S localhost:8000`.
 3. Navigate to `http://localhost:8000/frontend/index.html`.
