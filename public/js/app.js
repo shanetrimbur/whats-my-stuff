@@ -125,6 +125,15 @@ function buildCard(result) {
   if (result.est_value_high > 0) {
     card.appendChild(el('p', 'value', `Estimated value: ${money(result.est_value_low)}–${money(result.est_value_high)}`));
   }
+  if (result.market) {
+    const m = result.market;
+    const stats = el('p', 'market');
+    const label = m.sample_size > 1 ? `${m.sample_size} ${m.kind} listings, median ${money(m.median)}` : `${m.kind} price ${money(m.median)}`;
+    stats.append(`${m.source}: ${label} · `);
+    const a = link(m.url, 'see comps');
+    stats.appendChild(a);
+    card.appendChild(stats);
+  }
   card.appendChild(el('p', 'reasoning', result.reasoning));
   card.appendChild(buildNextStep(result));
   return card;

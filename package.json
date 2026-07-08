@@ -6,7 +6,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "MOCK_ANALYZE=1 node server.js"
+    "dev": "MOCK_ANALYZE=1 node server.js",
+    "telegram": "node bots/telegram.js"
   },
   "engines": {
     "node": ">=18"

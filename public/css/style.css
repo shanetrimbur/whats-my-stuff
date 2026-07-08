@@ -98,6 +98,8 @@ h1 { margin: 0; font-size: 1.6rem; }
 .trash { background: var(--trash); }
 
 .value { font-size: 1.05rem; margin: 0.3rem 0; }
+.market { color: var(--muted); font-size: 0.9rem; margin: 0.1rem 0 0; }
+.market a { color: inherit; }
 .reasoning { margin: 0.5rem 0 0; }
 
 .next-step {
