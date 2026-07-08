@@ -1,0 +1,18 @@
+{
+  "name": "whats-my-stuff",
+  "version": "0.1.0",
+  "description": "Snap a photo of your clutter — find out what it is, what it's worth, and whether to sell, donate, recycle, or repurpose it.",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "MOCK_ANALYZE=1 node server.js",
+    "telegram": "node bots/telegram.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.110.0"
+  }
+}

@@ -1,3 +1,0 @@
-<?php
-// Placeholder for notifications
-?>

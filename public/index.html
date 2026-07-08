@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What's My Stuff</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>&#128247;</text></svg>">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <h1>What's My Stuff</h1>
+    <p class="tagline">Snap a photo of your clutter. Find out what it's worth and what to do with it.</p>
+  </header>
+
+  <main>
+    <label class="capture-button" for="photo-input">
+      <span class="capture-icon" aria-hidden="true">&#128247;</span>
+      <span id="capture-label">Take a photo</span>
+    </label>
+    <input type="file" id="photo-input" accept="image/*" capture="environment" hidden>
+
+    <section id="status" hidden>
+      <img id="preview" alt="Your item">
+      <p id="status-text">Analyzing&hellip;</p>
+    </section>
+
+    <section id="result" hidden></section>
+
+    <section id="history-section" hidden>
+      <h2>Earlier items</h2>
+      <div id="history"></div>
+      <button id="clear-history" type="button">Clear history</button>
+    </section>
+  </main>
+
+  <footer>
+    <p>Photos are analyzed and discarded — nothing is stored on the server. History lives only in this browser.</p>
+  </footer>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
