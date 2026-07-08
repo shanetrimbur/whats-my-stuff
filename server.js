@@ -3,7 +3,7 @@ import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { analyzeImage, errorToStatus } from './lib/analyze.js';
-import { getMarketStats } from './lib/pricing.js';
+import { getWantsScores } from './lib/demand/index.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PUBLIC_DIR = path.join(__dirname, 'public');
@@ -83,7 +83,7 @@ async function handleAnalyze(req, res) {
 
   try {
     const result = await analyzeImage(payload.mediaType, payload.data);
-    result.market = await getMarketStats(result.search_query); // null unless PRICING configured
+    result.wants = await getWantsScores(result);
     sendJson(res, 200, { result });
   } catch (err) {
     const mapped = errorToStatus(err);

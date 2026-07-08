@@ -6,12 +6,12 @@
  *
  *   TELEGRAM_BOT_TOKEN=123:abc npm run telegram
  *
- * Uses the same analyzer/pricing configuration as the web server
- * (ANALYZER, PRICING, MOCK_ANALYZE, etc.).
+ * Uses the same analyzer/demand configuration as the web server
+ * (ANALYZER, MOCK_ANALYZE, demand provider keys, etc.).
  */
 
 import { analyzeImage, errorToStatus } from '../lib/analyze.js';
-import { getMarketStats } from '../lib/pricing.js';
+import { getWantsScores } from '../lib/demand/index.js';
 
 const TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 if (!TOKEN) {
@@ -63,10 +63,20 @@ function formatCard(result) {
   if (result.est_value_high > 0) {
     lines.push(`Estimated value: ${money(result.est_value_low)}–${money(result.est_value_high)}`);
   }
-  if (result.market) {
-    const m = result.market;
-    lines.push(`${m.source}: ${m.sample_size > 1 ? `${m.sample_size} ${m.kind} listings, ` : ''}median ${money(m.median)} (${money(m.low)}–${money(m.high)})`);
-    lines.push(m.url);
+  if (result.wants?.length) {
+    const top = result.wants[0];
+    lines.push('', `${top.headline}`);
+    if (top.score != null) {
+      lines.push(`WANTS ${top.score}/100 (${top.band}) · confidence ${top.grade}`);
+    } else {
+      lines.push(`WANTS confidence ${top.grade} · ${top.band}`);
+    }
+    for (const route of result.wants.slice(0, 3)) {
+      const net = route.net_proceeds_est != null ? `${money(route.net_proceeds_est)} net` : 'net unknown';
+      lines.push(`- ${route.marketplace}: ${net}, ${route.days_to_sale_label}`);
+      const sourceUrl = route.sources.find((source) => source.url)?.url;
+      if (sourceUrl) lines.push(`  ${sourceUrl}`);
+    }
   }
   lines.push('', result.reasoning);
 
@@ -101,7 +111,7 @@ async function handleMessage(message) {
   try {
     const base64 = await downloadPhoto(photo.file_id);
     const result = await analyzeImage('image/jpeg', base64);
-    result.market = await getMarketStats(result.search_query);
+    result.wants = await getWantsScores(result);
     await tg('sendMessage', { chat_id: chatId, text: formatCard(result) });
   } catch (err) {
     const mapped = errorToStatus(err);

@@ -21,6 +21,16 @@ const DISPOSITION_LABELS = {
   trash: 'Let it go',
 };
 
+const MARKETPLACE_LABELS = {
+  amazon: 'Amazon',
+  ebay: 'eBay',
+  discogs: 'Discogs',
+  reverb: 'Reverb',
+  pricecharting: 'PriceCharting',
+  local: 'Local',
+  web: 'Web',
+};
+
 input.addEventListener('change', async () => {
   const file = input.files?.[0];
   if (!file) return;
@@ -119,11 +129,16 @@ function buildCard(result) {
   card.appendChild(el('h2', null, result.name));
   card.appendChild(el('p', 'meta', `${result.category} · condition: ${result.condition}`));
 
-  const badge = el('span', `badge ${result.disposition}`, DISPOSITION_LABELS[result.disposition] || result.disposition);
+  const topWant = result.wants?.[0];
+  const badgeText = topWant?.score != null ? topWant.headline : (DISPOSITION_LABELS[result.disposition] || result.disposition);
+  const badge = el('span', `badge ${result.disposition}`, badgeText);
   card.appendChild(badge);
 
   if (result.est_value_high > 0) {
     card.appendChild(el('p', 'value', `Estimated value: ${money(result.est_value_low)}–${money(result.est_value_high)}`));
+  }
+  if (result.wants?.length) {
+    card.appendChild(buildWantsPanel(result.wants));
   }
   if (result.market) {
     const m = result.market;
@@ -137,6 +152,54 @@ function buildCard(result) {
   card.appendChild(el('p', 'reasoning', result.reasoning));
   card.appendChild(buildNextStep(result));
   return card;
+}
+
+function buildWantsPanel(wants) {
+  const wrap = el('section', 'wants-panel');
+  const top = wants[0];
+  const meter = el('div', 'wants-meter');
+  const score = el('div', 'wants-score');
+  score.appendChild(el('span', 'wants-number', top.score == null ? 'D' : String(top.score)));
+  score.appendChild(el('span', 'wants-denom', top.score == null ? 'grade' : '/100'));
+  meter.appendChild(score);
+
+  const copy = el('div', 'wants-copy');
+  copy.appendChild(el('strong', null, top.score == null ? 'Not enough market data' : top.band));
+  copy.appendChild(el('span', null, `Confidence ${top.grade}${top.match_precision ? ` · ${top.match_precision} match` : ''}`));
+  meter.appendChild(copy);
+  wrap.appendChild(meter);
+
+  const table = el('div', 'routing-table');
+  for (const [idx, route] of wants.slice(0, 3).entries()) {
+    const row = el('div', `routing-row${idx === 0 ? ' top-route' : ''}`);
+    row.appendChild(el('span', 'route-market', MARKETPLACE_LABELS[route.marketplace] || route.marketplace));
+    row.appendChild(el('span', 'route-net', route.net_proceeds_est != null ? `${money(route.net_proceeds_est)} net` : 'net unknown'));
+    row.appendChild(el('span', 'route-days', route.days_to_sale_label || 'unknown'));
+    const source = route.sources?.find((entry) => entry.url);
+    row.appendChild(source ? link(source.url, 'source') : el('span', 'route-source', 'no source'));
+    table.appendChild(row);
+  }
+  wrap.appendChild(table);
+
+  const evidence = wants
+    .flatMap((route) => route.sources || [])
+    .filter((source) => source.label)
+    .slice(0, 4);
+  if (evidence.length) {
+    const footer = el('p', 'evidence');
+    footer.append('Signals: ');
+    evidence.forEach((source, idx) => {
+      if (idx > 0) footer.append(' · ');
+      if (source.url) {
+        footer.appendChild(link(source.url, source.label));
+      } else {
+        footer.append(source.label);
+      }
+    });
+    wrap.appendChild(footer);
+  }
+
+  return wrap;
 }
 
 function buildNextStep(result) {
