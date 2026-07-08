@@ -7,12 +7,16 @@
   "scripts": {
     "start": "node server.js",
     "dev": "MOCK_ANALYZE=1 node server.js",
-    "telegram": "node bots/telegram.js"
+    "telegram": "node bots/telegram.js",
+    "test": "node test/smoke.mjs"
   },
   "engines": {
     "node": ">=18"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.110.0"
+  },
+  "devDependencies": {
+    "playwright-core": "^1.61.1"
   }
 }

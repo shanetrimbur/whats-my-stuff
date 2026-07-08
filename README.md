@@ -83,6 +83,10 @@ The bot uses long polling, so it runs from a laptop or Raspberry Pi behind NAT w
 
 It's one Node process with no database — any small host works (Fly.io, Railway, Render, a $5 VPS). Set `ANTHROPIC_API_KEY` in the host's secret store and expose the port. Each photo costs one vision API call.
 
+## Contributing / picking this up
+
+Start with **[HANDOFF.md](HANDOFF.md)** — environment setup, conventions, the Phase 1 task breakdown, and the gotchas already discovered. Run `npm test` (12-check smoke suite: API surface + headless-browser UI flow) before pushing.
+
 ## Roadmap and rationale
 
 - **[SPEC.md](SPEC.md)** — the approved product spec for where this is going: the **WANTS Index** ("who wants this?"), per-marketplace demand scoring from legal data sources, routing ("sell it here, it'll take ~N days, you'll net $Y"), room sweep, and the first-party outcome flywheel.
