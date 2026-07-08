@@ -85,4 +85,5 @@ It's one Node process with no database — any small host works (Fly.io, Railway
 
 ## Roadmap and rationale
 
-The product direction — what this deliberately is and isn't (no in-app marketplace, no accounts in v1, no notifications), the competitive landscape, and the v1/v2 roadmap — is documented in [MURDER_BOARD.md](MURDER_BOARD.md).
+- **[SPEC.md](SPEC.md)** — the approved product spec for where this is going: the **WANTS Index** ("who wants this?"), per-marketplace demand scoring from legal data sources, routing ("sell it here, it'll take ~N days, you'll net $Y"), room sweep, and the first-party outcome flywheel.
+- **[MURDER_BOARD.md](MURDER_BOARD.md)** — the original critique: competitive landscape, what this product deliberately is not, and why.
